@@ -32,7 +32,7 @@ Module Program
         'Console.WriteLine(deleteuser)
 
         Dim dal As New PostDAL()
-        'list all user
+        'list all posts
         Dim posts As List(Of Post) = dal.GetAllPost()
         For Each post In posts
             Console.WriteLine($"Post {post.PostID} posted by {post.Username.Trim()} with title '{post.Title.ToUpper}' the content is")
@@ -40,6 +40,30 @@ Module Program
             Console.WriteLine($"Posted on {post.TimeStamp} with total likes {post.TotalLikes} and total dislikes {post.TotalDislikes}")
             Console.WriteLine("------------------------------------------------------")
         Next
+        'new post
+        Dim newPost As New Post()
+        newPost.UserID = 1
+        newPost.Title = "asdsadsa"
+        newPost.PostText = "asdasdcsacxvzvasfsakjkfsajkfas"
+        newPost.PostCategoryID = 1
+        Dim createpost = dal.CreatePost(newPost)
+        Console.WriteLine("########")
+        Console.WriteLine(createpost)
+        Console.WriteLine("########")
+        'new list all posts
+        Dim newPosts As List(Of Post) = dal.GetAllPost()
+        For Each post In newPosts
+            Console.WriteLine($"Post {post.PostID} posted by {post.Username.Trim()} with title '{post.Title.ToUpper}' the content is")
+            Console.WriteLine($"{post.PostText}")
+            Console.WriteLine($"Posted on {post.TimeStamp} with total likes {post.TotalLikes} and total dislikes {post.TotalDislikes}")
+            Console.WriteLine("------------------------------------------------------")
+        Next
+        'delete new user
+        Dim deletepost = dal.DeletePost(newPost.Title, newPost.UserID)
+        Console.WriteLine("#########")
+        Console.WriteLine(deletepost)
+        Console.WriteLine("#########")
+
     End Sub
 
 End Module

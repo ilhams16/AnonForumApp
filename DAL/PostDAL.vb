@@ -3,6 +3,7 @@ Imports AFBO
 Imports System.Data.SqlClient
 
 Public Class PostDAL
+    Implements IPost
     Private ReadOnly strConn As String
     Private conn As SqlConnection
     Private cmd As SqlCommand
@@ -13,7 +14,7 @@ Public Class PostDAL
         conn = New SqlConnection(strConn)
     End Sub
 
-    Public Function GetAllPost() As List(Of Post)
+    Public Function GetAllPost() As List(Of Post) Implements IPost.GetAllPost
         Dim Posts As New List(Of Post)
         Try
             Dim strSql = "select * from Posts p
@@ -51,21 +52,21 @@ Public Class PostDAL
         End Try
     End Function
 
-    Public Function CreatePost(post As Post)
+    Public Function CreatePost(post As Post) Implements IPost.AddNewPost
         Dim status = ""
         Using conn As New SqlConnection(strConn)
             Dim strSql As String = "DECLARE	@return_value int
                 EXEC	@return_value = [dbo].[NewPost]
-		                @username,
-		                @email,
-		                @password,
-		                @nickname
+		                @userID
+                        ,@title
+                        ,@post
+                        ,@postCategoryID
                 SELECT	'Return Value' = @return_value"
             Dim cmd As New SqlCommand(strSql, conn)
-            cmd.Parameters.AddWithValue("@username", user.Username)
-            cmd.Parameters.AddWithValue("@email", user.Email)
-            cmd.Parameters.AddWithValue("@password", user.Password)
-            cmd.Parameters.AddWithValue("@nickname", user.Nickname)
+            cmd.Parameters.AddWithValue("@userID", post.UserID)
+            cmd.Parameters.AddWithValue("@title", post.Title)
+            cmd.Parameters.AddWithValue("@post", post.PostText)
+            cmd.Parameters.AddWithValue("@postCategoryID", post.PostCategoryID)
             conn.Open()
             Dim dr As SqlDataReader = cmd.ExecuteReader()
 
@@ -82,15 +83,17 @@ Public Class PostDAL
         Return status
     End Function
 
-    Public Function DeleteUser(ByVal username As String) Implements IUser.DeleteUser
+    Public Function DeletePost(ByVal title As String, ByVal userID As Integer) Implements IPost.DeletePost
         Dim status = ""
         Using conn As New SqlConnection(strConn)
             Dim strSql As String = "DECLARE	@return_value int
-                EXEC	@return_value = [dbo].[DeleteUser]
-		                @username
+                EXEC	@return_value = [dbo].[DeletePost]
+		                @title
+                        ,@userID
                 SELECT	'Return Value' = @return_value"
             Dim cmd As New SqlCommand(strSql, conn)
-            cmd.Parameters.AddWithValue("@username", username)
+            cmd.Parameters.AddWithValue("@title", title)
+            cmd.Parameters.AddWithValue("@userID", userID)
             conn.Open()
             Dim dr As SqlDataReader = cmd.ExecuteReader()
 
