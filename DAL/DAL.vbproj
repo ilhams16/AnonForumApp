@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AFBO\AFBO.vbproj" />
+    <ProjectReference Include="..\Interface\Interface.vbproj" />
   </ItemGroup>
 
 </Project>
