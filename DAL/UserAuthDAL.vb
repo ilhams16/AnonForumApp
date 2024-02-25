@@ -16,10 +16,6 @@ Namespace AnonForum
             conn = New SqlConnection(strConn)
         End Sub
 
-        'Public Function GetAllUser() As List(Of UserAuth) Implements IUser.GetAllUsers
-        '    Throw New NotImplementedException()
-        'End Function
-
         Public Function GetAll() As List(Of UserAuth) Implements IUser.GetAllUser
             Dim UserAuths As New List(Of UserAuth)
             Try
