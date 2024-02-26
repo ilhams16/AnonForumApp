@@ -58,8 +58,26 @@ Module Program
             Console.WriteLine($"Posted on {post.TimeStamp} with total likes {post.TotalLikes} and total dislikes {post.TotalDislikes}")
             Console.WriteLine("------------------------------------------------------")
         Next
+        'edit post
+        Dim editPost As New Post()
+        editPost.UserID = 1
+        editPost.Title = "zxczvcnxbvnzmb"
+        editPost.PostText = "asdasdcsacxvzvasfsakjkfsajkfas"
+        Dim editedpost = dal.EditPost(newPost, editPost)
+        Console.WriteLine("########")
+        Console.WriteLine(editedpost)
+        Console.WriteLine("########")
+
+        'list post by title
+        Dim postbyTitle As List(Of Post) = dal.GetPostbyTitle(editPost.Title)
+        For Each post In postbyTitle
+            Console.WriteLine($"Post {post.PostID} posted by {post.Username.Trim()} with title '{post.Title.ToUpper}' the content is")
+            Console.WriteLine($"{post.PostText}")
+            Console.WriteLine($"Posted on {post.TimeStamp} with total likes {post.TotalLikes} and total dislikes {post.TotalDislikes}")
+            Console.WriteLine("------------------------------------------------------")
+        Next
         'delete new user
-        Dim deletepost = dal.DeletePost(newPost.Title, newPost.UserID)
+        Dim deletepost = dal.DeletePost(editPost.Title, editPost.UserID)
         Console.WriteLine("#########")
         Console.WriteLine(deletepost)
         Console.WriteLine("#########")

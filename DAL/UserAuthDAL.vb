@@ -111,6 +111,38 @@ Namespace AnonForum
             Return status
         End Function
 
+        Public Function EditNickname(ByVal username As String, ByVal nickname As String) Implements IUser.EditNickname
+            Dim user As New UserAuth()
+            Using conn As New SqlConnection(strConn)
+                Dim strSql As String = "DECLARE	@return_value int
+                                EXECUTE @return_value = [dbo].[EditNickname] 
+                                       @Username
+                                      ,@Nickname
+                                       GO
+                                SELECT	'Return Value' = @return_value"
+                Dim cmd As New SqlCommand(strSql, conn)
+                cmd.Parameters.AddWithValue("@Username", username)
+                cmd.Parameters.AddWithValue("@Nickname", nickname)
+                conn.Open()
+                Dim dr As SqlDataReader = cmd.ExecuteReader()
+
+                If dr.HasRows Then
+                    dr.Read()
+                    user.UserID = CInt(dr("UserID"))
+                    user.Username = dr("Username").ToString()
+                    user.Email = dr("Email").ToString()
+                    user.Nickname = dr("Nickname").ToString()
+                    user.Password = dr("Password").ToString()
+                End If
+
+                dr.Close()
+                cmd.Dispose()
+                conn.Close()
+            End Using
+
+            Return user
+        End Function
+
         Public Function DeleteUser(ByVal username As String) Implements IUser.DeleteUser
             Dim status = ""
             Using conn As New SqlConnection(strConn)
